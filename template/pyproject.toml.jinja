@@ -1,8 +1,14 @@
+{%- macro toml_str(value) -%}
+"{{ value | replace('\\', '\\\\') | replace('"', '\\"') }}"
+{%- endmacro -%}
 [project]
 name = "{{ project_name }}"
 version = "0.1.0"
-description = {{ description | tojson }}
+description = {{ toml_str(description) }}
 readme = "README.md"
+authors = [
+    { name = {{ toml_str(author_name) }}, email = {{ toml_str(author_email) }} },
+]
 requires-python = ">={{ python_version }}"
 dependencies = []
 

@@ -21,6 +21,16 @@ description:
   help: Short description
   default: ""
 
+author_name:
+  type: str
+  help: Author name
+  validator: "{% if not author_name.strip() %}Author name is required.{% endif %}"
+
+author_email:
+  type: str
+  help: Author email
+  validator: "{% if '@' not in author_email %}Enter a valid email address.{% endif %}"
+
 python_version:
   type: str
   help: Python version

@@ -13,7 +13,8 @@ uvx copier copy --trust gh:tchauffi/python-repos-template my-project
 ```
 
 Copier asks for the project name (defaults to the folder name), a description,
-the Python version, and whether to create a GitHub repository. Then it:
+the author name and email, the Python version, and whether to create a GitHub
+repository. Then it:
 
 1. renders the project with your names filled in,
 2. runs `git init`, `uv sync` and `pre-commit install`,
@@ -21,6 +22,18 @@ the Python version, and whether to create a GitHub repository. Then it:
 4. optionally runs `gh repo create --source . --push`.
 
 `--trust` is required because the template runs those setup commands.
+
+### Skip typing your name and email
+
+Copier reads default answers from a user settings file
+(`~/Library/Application Support/copier/settings.yml` on macOS,
+`~/.config/copier/settings.yml` on Linux):
+
+```yaml
+defaults:
+  author_name: Your Name
+  author_email: you@example.com
+```
 
 ## Update an existing project
 
