@@ -1,0 +1,37 @@
+[project]
+name = "{{ project_name }}"
+version = "0.1.0"
+description = {{ description | tojson }}
+readme = "README.md"
+requires-python = ">={{ python_version }}"
+dependencies = []
+
+[project.scripts]
+{{ project_name }} = "{{ package_name }}:main"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "ruff>=0.16.9",
+]
+
+[build-system]
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
+
+[tool.pytest]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort (import sorting)
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+]

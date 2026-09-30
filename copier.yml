@@ -1,0 +1,51 @@
+_subdirectory: template
+_min_copier_version: "9.5"
+
+project_name:
+  type: str
+  help: Project name (lowercase, dashes allowed)
+  default: "{{ _folder_name }}"
+  validator: >-
+    {% if project_name != project_name | lower or ' ' in project_name
+       or project_name[:1] not in 'abcdefghijklmnopqrstuvwxyz' %}
+    Use lowercase letters, digits and dashes, starting with a letter (e.g. my-project).
+    {% endif %}
+
+package_name:
+  type: str
+  default: "{{ project_name | replace('-', '_') }}"
+  when: false
+
+description:
+  type: str
+  help: Short description
+  default: ""
+
+python_version:
+  type: str
+  help: Python version
+  choices: ["3.12", "3.13", "3.14"]
+  default: "3.13"
+
+github_repo:
+  type: str
+  help: Create a GitHub repository and push to it? (needs the gh CLI)
+  choices:
+    "No": none
+    Private: private
+    Public: public
+  default: none
+
+_tasks:
+  - command: git init -q -b main
+    when: "{{ _copier_operation == 'copy' }}"
+  - command: uv sync
+  - command: uv run pre-commit install
+    when: "{{ _copier_operation == 'copy' }}"
+  # Hooks may auto-fix files on the first commit; re-stage and retry once.
+  - command: >-
+      git add -A && git commit -q -m "Initial commit from python-repos-template"
+      || (git add -A && git commit -q -m "Initial commit from python-repos-template")
+    when: "{{ _copier_operation == 'copy' }}"
+  - command: gh repo create {{ project_name }} --{{ github_repo }} --source . --push
+    when: "{{ _copier_operation == 'copy' and github_repo != 'none' }}"

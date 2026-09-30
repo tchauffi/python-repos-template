@@ -1,0 +1,66 @@
+# {{ project_name }}
+{% if description %}
+{{ description }}
+{% endif %}
+## Setup
+
+Requires [uv](https://docs.astral.sh/uv/).
+
+```bash
+make setup   # uv sync + pre-commit install
+```
+
+## Commands
+
+```bash
+make test     # run unit tests with pytest
+make lint     # run all pre-commit hooks on every file
+make format   # ruff format + ruff check --fix
+make update   # upgrade locked dependencies and pre-commit hooks
+make clean    # remove caches and build artifacts
+
+uv add <package>         # add a dependency
+uv add --dev <package>   # add a dev dependency
+uv run {{ project_name }}   # run the entry point
+```
+
+## Project layout
+
+```text
+.
+├── .github/workflows/ci.yml   # runs pre-commit and tests on pushes and PRs
+├── notebooks/                 # Jupyter notebooks (outputs stripped on commit)
+├── src/{{ package_name }}/   # package code
+├── tests/                     # unit tests (pytest)
+├── .pre-commit-config.yaml
+├── Makefile
+├── pyproject.toml             # dependencies + ruff/pytest config
+└── uv.lock
+```
+
+## Notebooks
+
+`ipykernel` is a dev dependency, so after `make setup` you can pick the
+project's `.venv` as the kernel in VS Code or Jupyter. The package is installed
+in editable mode, so `from {{ package_name }} import ...` works in notebooks.
+
+On commit, [nbstripout](https://github.com/kynan/nbstripout) strips outputs and
+execution counts, and ruff lints and formats notebook cells.
+
+## Pre-commit hooks
+
+- **Basic hygiene:** trailing whitespace, end-of-file newline, YAML/TOML syntax,
+  large files, merge conflict markers, private keys
+- **ruff:** lint (with auto-fix) and format
+- **nbstripout:** strip notebook outputs
+- **uv-lock:** keep `uv.lock` in sync with `pyproject.toml`
+
+## Template updates
+
+This project was generated from
+[python-repos-template](https://github.com/tchauffi/python-repos-template).
+To pull in later changes to the template:
+
+```bash
+uvx copier update --trust
+```
