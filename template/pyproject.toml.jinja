@@ -9,6 +9,10 @@ readme = "README.md"
 authors = [
     { name = {{ toml_str(author_name) }}, email = {{ toml_str(author_email) }} },
 ]
+{%- if license != "none" %}
+license = "{{ license }}"
+license-files = ["LICENSE"]
+{%- endif %}
 requires-python = ">={{ python_version }}"
 dependencies = []
 

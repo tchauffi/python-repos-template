@@ -33,6 +33,9 @@ uv run {{ project_name }}   # run the entry point
 ├── src/{{ package_name }}/   # package code
 ├── tests/                     # unit tests (pytest)
 ├── .pre-commit-config.yaml
+{%- if license != "none" %}
+├── LICENSE
+{%- endif %}
 ├── Makefile
 ├── pyproject.toml             # dependencies + ruff/pytest config
 └── uv.lock
@@ -64,3 +67,9 @@ To pull in later changes to the template:
 ```bash
 uvx copier update --trust
 ```
+{%- if license != "none" %}
+
+## License
+
+[{{ license }}](LICENSE)
+{%- endif %}

@@ -13,8 +13,8 @@ uvx copier copy --trust gh:tchauffi/python-repos-template my-project
 ```
 
 Copier asks for the project name (defaults to the folder name), a description,
-the author name and email, the Python version, and whether to create a GitHub
-repository. Then it:
+the author name and email, a license, the Python version, and whether to create
+a GitHub repository. Then it:
 
 1. renders the project with your names filled in,
 2. runs `git init`, `uv sync` and `pre-commit install`,
@@ -57,6 +57,7 @@ my-project/
 ├── .gitignore
 ├── .pre-commit-config.yaml    # hygiene checks, ruff, nbstripout, uv-lock
 ├── .python-version
+├── LICENSE                    # MIT, Apache-2.0, BSD-3-Clause, GPL-3.0+ or none
 ├── Makefile                   # make setup / test / lint / format / update / clean
 ├── pyproject.toml
 ├── README.md
@@ -66,7 +67,8 @@ my-project/
 ## Developing the template
 
 The template lives in `template/`; questions and setup tasks are in
-`copier.yml`. To try local changes:
+`copier.yml`. License texts live in `licenses/` and are pulled into the
+generated `LICENSE` file. To try local changes:
 
 ```bash
 uvx copier copy --trust --vcs-ref HEAD . /tmp/demo-project

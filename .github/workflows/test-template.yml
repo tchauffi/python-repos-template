@@ -8,6 +8,9 @@ on:
 jobs:
   render:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        license: [MIT, Apache-2.0, BSD-3-Clause, GPL-3.0-or-later, none]
     steps:
       - uses: actions/checkout@v7
         with:
@@ -23,7 +26,12 @@ jobs:
         run: >-
           uvx copier copy --trust --defaults --vcs-ref HEAD
           --data author_name="CI" --data author_email="ci@example.com"
-          . "$RUNNER_TEMP/demo-project"
+          --data license="${{ matrix.license }}"
+          . "$RUNNER_TEMP/demo-project" 2>&1 | tee "$RUNNER_TEMP/render.log"
+      # The initial-commit task retries after hook fixes, which would hide
+      # template output that isn't hook-clean.
+      - name: Check hooks passed on the first commit attempt
+        run: "! grep -n Failed \"$RUNNER_TEMP/render.log\""
       - name: Check generated project
         working-directory: ${{ runner.temp }}/demo-project
         run: |
