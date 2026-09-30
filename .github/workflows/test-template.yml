@@ -13,6 +13,8 @@ jobs:
         with:
           fetch-depth: 0
       - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          cache-dependency-glob: template/pyproject.toml.jinja
       - name: Configure git identity for the initial commit
         run: |
           git config --global user.name "CI"
